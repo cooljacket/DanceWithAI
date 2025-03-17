@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+    {{ $style := resources.Get "css/styles.css" | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+</head>
+<body>
+    {{ partial "header.html" . }}
+    <div class="container">
+        {{ block "main" . }}{{ end }}
+    </div>
+    {{ $js := resources.Get "js/theme.js" | resources.Minify | resources.Fingerprint }}
+    <script src="{{ $js.RelPermalink }}"></script>
+</body>
+</html>

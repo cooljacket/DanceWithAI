@@ -1,0 +1,21 @@
+{{ define "main" }}
+<article class="single-page">
+    <header class="page-header">
+        <h1 class="article-title">{{ .Title }}</h1>
+        <div class="article-meta">
+            <span class="publish-date">发布于 {{ .Date.Format "2006-01-02" }}</span>
+            {{ with .Params.tags }}
+            <span class="article-tags">
+                标签：
+                {{ range . }}
+                <a href="/tags/{{ . | urlize }}" class="tag">{{ . }}</a>
+                {{ end }}
+            </span>
+            {{ end }}
+        </div>
+    </header>
+    <div class="page-content markdown-body">
+        {{ .Content }}
+    </div>
+</article>
+{{ end }}

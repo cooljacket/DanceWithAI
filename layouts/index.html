@@ -1,0 +1,30 @@
+{{ define "main" }}
+<main class="main-content">
+    <div class="articles">
+        {{ range first 5 .Site.RegularPages }}
+        <article class="article-card">
+            <h2 class="article-title">{{ .Title }}</h2>
+            <div class="article-meta">发布于 {{ .Date.Format "2006-01-02" }} | 分类：{{ .Section }}</div>
+            <p class="article-excerpt">{{ .Description | default (.Summary | plainify | truncate 200) }}</p>
+            <a href="{{ .RelPermalink }}" class="read-more">阅读更多 →</a>
+        </article>
+        {{ end }}
+    </div>
+
+    <aside class="sidebar">
+        <div class="sidebar-widget">
+            <h3 class="widget-title">热门标签</h3>
+            <div class="tag-cloud">
+                {{ range .Site.Taxonomies.tags }}
+                <a href="{{ .Page.RelPermalink }}" class="tag">{{ .Page.Title }}</a>
+                {{ end }}
+            </div>
+        </div>
+
+        <div class="sidebar-widget">
+            <h3 class="widget-title">关于博客</h3>
+            <p>{{ .Site.Params.blog_introduction }}</p>
+        </div>
+    </aside>
+</main>
+{{ end }}

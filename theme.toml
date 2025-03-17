@@ -1,0 +1,16 @@
+name = "DanceWithAI"
+license = "MIT"
+licenselink = "https://github.com/yourname/DanceWithAI/blob/master/LICENSE"
+blog_introduction = "一个专注于AI技术与未来发展的Hugo博客主题"
+homepage = "https://github.com/yourname/DanceWithAI/"
+tags = ["blog", "responsive", "clean", "modern", "AI"]
+features = ["dark mode", "responsive", "clean"]
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true  # 允许渲染原始 HTML（避免代码块被转义）
+
+[author]
+  name = "Your Name"
+  homepage = "https://yourwebsite.com/"

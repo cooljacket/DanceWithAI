@@ -1,4 +1,6 @@
 {{ define "main" }}
+{{ $markdownExtensions := resources.Get "js/markdown-extensions.js" | resources.Minify | resources.Fingerprint }}
+<script type="module" src="{{ $markdownExtensions.RelPermalink }}"></script>
 <article class="single-page">
     <header class="page-header">
         <h1 class="article-title">{{ .Title }}</h1>

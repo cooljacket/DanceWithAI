@@ -1,18 +1,15 @@
 {{ define "main" }}
-<div class="list-page">
-    <header class="page-header">
-        <h1>{{ .Title }}</h1>
-    </header>
-    <div class="page-content">
+<div class="main-content">
+    <div class="articles">
+        <header class="page-header">
+            <h1>{{ .Title }}</h1>
+        </header>
         {{ range .Pages }}
-        <article class="list-item">
-            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-            {{ if .Date }}
-            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-            {{ end }}
-            {{ if .Summary }}
-            <div class="summary">{{ .Summary }}</div>
-            {{ end }}
+        <article class="article-card">
+            <h2 class="article-title">{{ .Title }}</h2>
+            <div class="article-meta">发布于 {{ .Date.Format "2006-01-02" }} | 分类：{{ .Section }}</div>
+            <p class="article-excerpt">{{ .Description | default (.Summary | plainify | truncate 200) }}</p>
+            <a href="{{ .RelPermalink }}" class="read-more">阅读更多 →</a>
         </article>
         {{ end }}
     </div>

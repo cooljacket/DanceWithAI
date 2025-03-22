@@ -1,7 +1,9 @@
 {{ define "main" }}
 {{ $markdownExtensions := resources.Get "js/markdown-extensions.js" | js.Build | resources.Minify | resources.Fingerprint }}
 {{ $wikilinksCSS := resources.Get "css/wikilinks.css" | css.Sass | resources.Minify | resources.Fingerprint }}
+{{ $readingTime := resources.Get "js/reading-time.js" | js.Build | resources.Minify | resources.Fingerprint }}
 <script type="module" src="{{ $markdownExtensions.RelPermalink }}"></script>
+<script src="{{ $readingTime.RelPermalink }}"></script>
 <link rel="stylesheet" href="{{ $wikilinksCSS.RelPermalink }}">
 
 {{ $articleLinks := partial "article-links.html" . }}
@@ -19,6 +21,7 @@
         <h1 class="article-title">{{ .Title }}</h1>
         <div class="article-meta">
             <span class="publish-date">发布于 {{ .Date.Format "2006-01-02" }}</span>
+            <span class="reading-time"></span>
             {{ with .Params.tags }}
             <span class="article-tags">
                 标签：

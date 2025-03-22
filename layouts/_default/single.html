@@ -2,6 +2,10 @@
 {{ $markdownExtensions := resources.Get "js/markdown-extensions.js" | resources.Minify | resources.Fingerprint }}
 <script type="module" src="{{ $markdownExtensions.RelPermalink }}"></script>
 <article class="single-page">
+    <div class="toc-container">
+        <div class="toc-title">目录</div>
+        <nav class="toc-list" id="toc"></nav>
+    </div>
     <header class="page-header">
         <h1 class="article-title">{{ .Title }}</h1>
         <div class="article-meta">

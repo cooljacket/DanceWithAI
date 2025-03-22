@@ -1,0 +1,27 @@
+{{ $titleToURL := dict }}
+{{ $titleToBacklinks := dict }}
+
+{{/* 仅在 development 环境输出日志，for确认这个索引确实只构建一次 */}}
+{{ if hugo.IsDevelopment }}
+    {{ warnf "[DEBUG] Rendering partial 'article-links'" }}
+{{ end }}
+
+{{ range .Site.RegularPages }}
+  {{ $titleToURL = merge $titleToURL (dict .Title .RelPermalink) }}
+{{ end }}
+
+{{ range .Site.RegularPages }}
+  {{ $currentTitle := .Title }}
+  {{ $currentURL := .RelPermalink }}
+  {{ $content := .RawContent }}
+  {{ $wikiLinkRegex := "\\[\\[([^\\]]+)\\]\\]|\\(\\(([^\\)]+)\\)\\)" }}
+  {{ range $match := findRE $wikiLinkRegex $content }}
+    {{ $wikiTitle := index (findRE "\\[\\[([^\\]]+)\\]\\]" $match) 0 }}
+    {{ $quoteTitle := index (findRE "\\(\\(([^\\)]+)\\)\\)" $match) 0 }}
+    {{ $title := or (strings.TrimPrefix "[[" (strings.TrimSuffix "]]" $wikiTitle)) (strings.TrimPrefix "((" (strings.TrimSuffix "))" $quoteTitle)) }}
+    {{ $backlinks := index $titleToBacklinks $title | default slice }}
+    {{ $titleToBacklinks = merge $titleToBacklinks (dict $title ($backlinks | append (dict "title" $currentTitle "url" $currentURL))) }}
+  {{ end }}
+{{ end }}
+
+{{ return (dict "titleToURL" $titleToURL "titleToBacklinks" $titleToBacklinks) }}

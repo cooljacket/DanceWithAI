@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // 处理所有Mermaid图表
                 document.querySelectorAll('pre code.language-mermaid').forEach(element => {
-                    console.log('Processing Mermaid chart...', element);
                     // 获取并解码图表内容
                     const graphDefinition = element.textContent
                         .replace(/&gt;/g, '>')

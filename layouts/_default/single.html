@@ -1,6 +1,15 @@
 {{ define "main" }}
-{{ $markdownExtensions := resources.Get "js/markdown-extensions.js" | resources.Minify | resources.Fingerprint }}
+{{ $markdownExtensions := resources.Get "js/markdown-extensions.js" | js.Build | resources.Minify | resources.Fingerprint }}
+{{ $wikilinksCSS := resources.Get "css/wikilinks.css" | css.Sass | resources.Minify | resources.Fingerprint }}
 <script type="module" src="{{ $markdownExtensions.RelPermalink }}"></script>
+<link rel="stylesheet" href="{{ $wikilinksCSS.RelPermalink }}">
+
+{{ $articleLinks := partial "article-links.html" . }}
+{{ $titleToURL := index $articleLinks "titleToURL" }}
+{{ $titleToBacklinks := index $articleLinks "titleToBacklinks" }}
+{{ $currentTitle := .Title }}
+{{ $backlinks := index $titleToBacklinks $currentTitle | default slice }}
+
 <article class="single-page">
     <div class="toc-container">
         <div class="toc-title">目录</div>
@@ -21,7 +30,35 @@
         </div>
     </header>
     <div class="page-content markdown-body">
-        {{ .Content }}
+        {{ $content := .RawContent }}
+        {{ $wikiLinkRegex := "\\[\\[([^\\]]+)\\]\\]|\\(\\(([^\\)]+)\\)\\)" }}
+        {{ $processedContent := $content }}
+        {{ range $match := findRE $wikiLinkRegex $content }}
+            {{ $wikiTitle := index (findRE "\\[\\[([^\\]]+)\\]\\]" $match) 0 }}
+            {{ $quoteTitle := index (findRE "\\(\\(([^\\)]+)\\)\\)" $match) 0 }}
+            {{ $title := or (strings.TrimPrefix "[[" (strings.TrimSuffix "]]" $wikiTitle)) (strings.TrimPrefix "((" (strings.TrimSuffix "))" $quoteTitle)) }}
+            {{ $url := index $titleToURL $title }}
+            {{ if $url }}
+                {{ if $wikiTitle }}
+                    {{ $processedContent = replace $processedContent $match (printf "<a href=\"%s\" class=\"wiki-link\" title=\"跳转到: %s\">%s</a>" $url $title $title) }}
+                {{ else }}
+                    {{ $processedContent = replace $processedContent $match (printf "<a href=\"%s\" class=\"quote-link\" title=\"引用自: %s\">%s</a>" $url $title $title) }}
+                {{ end }}
+            {{ else }}
+                {{ $processedContent = replace $processedContent $match (printf "<span class=\"wiki-link-missing\" title=\"页面未创建\">%s</span>" $title) }}
+            {{ end }}
+        {{ end }}
+        {{ $processedContent | markdownify }}
+    </div>
+    <div class="article-backlinks">
+        {{ if $backlinks }}
+        <h2>反向链接</h2>
+        <ul class="backlinks-list">
+            {{ range $backlinks }}
+            <li><a href="{{ .url }}" class="backlink">{{ .title }}</a></li>
+            {{ end }}
+        </ul>
+        {{ end }}
     </div>
 </article>
 {{ end }}

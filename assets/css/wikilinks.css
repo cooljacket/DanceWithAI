@@ -1,0 +1,52 @@
+.wiki-link {
+    color: #0366d6;
+    text-decoration: none;
+    border-bottom: 1px solid #0366d6;
+}
+
+.wiki-link:hover {
+    color: #0056b3;
+    border-bottom: 2px solid #0056b3;
+}
+
+.quote-link {
+    color: #28a745;
+    text-decoration: none;
+    border-bottom: 1px solid #28a745;
+}
+
+.quote-link:hover {
+    color: #218838;
+    border-bottom: 2px solid #218838;
+}
+
+.wiki-link-missing {
+    color: #dc3545;
+    text-decoration: none;
+    border-bottom: 1px dashed #dc3545;
+    cursor: not-allowed;
+}
+
+.article-backlinks {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e1e4e8;
+}
+
+.backlinks-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.backlinks-list li {
+    margin-bottom: 0.5rem;
+}
+
+.backlinks-list a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+.backlinks-list a:hover {
+    text-decoration: underline;
+}
